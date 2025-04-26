@@ -22,7 +22,6 @@ public class AuthService {
 
     public void exchangeCodeForToken(String code) {
         TokenResponse response = exchanger.exchange(code);
-
-        System.out.println("Access token: " + response);
+        //TODO TRATAR TOKEN
     }
 }

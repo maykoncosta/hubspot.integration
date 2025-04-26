@@ -47,6 +47,7 @@ public class HubSpotTokenExchanger implements OAuthTokenExchanger {
         ResponseEntity<TokenResponse> response = restTemplate.postForEntity(
                 "https://api.hubapi.com/oauth/v1/token", entity, TokenResponse.class);
 
+        log.info("code exchanged successfully");
         return response.getBody();
     }
 }
