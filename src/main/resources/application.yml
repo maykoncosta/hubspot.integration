@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: hubstop.integration
+
+hubspot:
+  oauth:
+    client:
+      id: b6dab194-1fd2-4263-bd8f-c3f2703af74c
+      secret: 6ff9d9e7-af99-4f3a-99d1-bda562ee154c
+      redirect:
+        uri: http://localhost:8080/auth/callback
+      scope: oauth crm.objects.contacts.write crm.objects.contacts.read crm.schemas.contacts.write crm.schemas.contacts.read
+      auth:
+        url: https://app.hubspot.com/oauth/authorize
