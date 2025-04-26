@@ -5,10 +5,10 @@ spring:
 hubspot:
   oauth:
     client:
-      id: b6dab194-1fd2-4263-bd8f-c3f2703af74c
-      secret: 6ff9d9e7-af99-4f3a-99d1-bda562ee154c
+      id: ${HUBSPOT_CLIENT_ID}
+      secret: ${HUBSPOT_CLIENT_SECRET}
       redirect:
-        uri: http://localhost:8080/auth/callback
-      scope: oauth crm.objects.contacts.write crm.objects.contacts.read crm.schemas.contacts.write crm.schemas.contacts.read
+        uri: ${HUBSPOT_REDIRECT_URI}
+      scope: ${HUBSPOT_SCOPES}
       auth:
-        url: https://app.hubspot.com/oauth/authorize
+        url: ${HUBSPOT_AUTH_URL}
