@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -47,7 +48,36 @@ public class HubSpotTokenExchanger implements OAuthTokenExchanger {
         ResponseEntity<TokenResponse> response = restTemplate.postForEntity(
                 "https://api.hubapi.com/oauth/v1/token", entity, TokenResponse.class);
 
+        TokenResponse tokenResponse = response.getBody();
         log.info("code exchanged successfully");
-        return response.getBody();
+        return tokenResponse;
     }
+
+    public TokenResponse refreshAccessToken(String refreshToken) {
+        log.info("Refreshing access token...");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("grant_type", "refresh_token");
+        form.add("client_id", clientId);
+        form.add("client_secret", clientSecret);
+        form.add("refresh_token", refreshToken);
+
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(form, headers);
+
+        try {
+            ResponseEntity<TokenResponse> response = restTemplate.postForEntity(
+                    "https://api.hubapi.com/oauth/v1/token",
+                    entity,
+                    TokenResponse.class
+            );
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            log.error("Erro ao renovar token: {}", e.getResponseBodyAsString(), e);
+            throw new RuntimeException("Erro ao renovar token", e);
+        }
+    }
+
 }

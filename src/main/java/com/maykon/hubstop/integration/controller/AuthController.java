@@ -28,4 +28,10 @@ public class AuthController {
         authService.exchangeCodeForToken(code);
         return ResponseEntity.ok("Token recebido com sucesso!");
     }
+
+    @GetMapping("/token")
+    public String getToken() {
+        String token = authService.getTokenFromRedis();
+        return token != null ? token : "Token não encontrado!";
+    }
 }

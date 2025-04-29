@@ -10,10 +10,12 @@ public class AuthService {
 
     private final OAuthUrlBuilder builder;
     private final OAuthTokenExchanger exchanger;
+    private final TokenStorageService tokenStorage;
 
-    public AuthService(HubSpotOAuthUrlBuilder builder, OAuthTokenExchanger exchanger) {
+    public AuthService(HubSpotOAuthUrlBuilder builder, OAuthTokenExchanger exchanger, TokenStorageService tokenStorage) {
         this.builder = builder;
         this.exchanger = exchanger;
+        this.tokenStorage = tokenStorage;
     }
 
     public String getAuthorizationUrl() {
@@ -21,7 +23,11 @@ public class AuthService {
     }
 
     public void exchangeCodeForToken(String code) {
-        TokenResponse response = exchanger.exchange(code);
-        //TODO TRATAR TOKEN
+        TokenResponse tokenResponse = exchanger.exchange(code);
+        tokenStorage.save(tokenResponse);
+    }
+
+    public String getTokenFromRedis() {
+        return tokenStorage.getLatestAccessToken();
     }
 }
