@@ -56,7 +56,7 @@ public class TokenStorageService {
         repository.save(token);
 
         log.info("Token is valid");
-        return "Token válido";
+        return cryptoService.decrypt(token.getEncryptedAccessToken());
     }
 
     private TokenEntity renovarToken(TokenEntity expiredToken) {
