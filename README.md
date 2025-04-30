@@ -73,6 +73,7 @@ Crie um arquivo `.env` na raiz com as seguintes variáveis:
 HUBSPOT_CLIENT_ID=seu_client_id
 HUBSPOT_CLIENT_SECRET=seu_client_secret
 HUBSPOT_REFRESH_TOKEN=seu_refresh_token
+SECURITY_CRYPTO_SECRET=1234567890123456
 ```
 
 ### 3. Banco de Dados
