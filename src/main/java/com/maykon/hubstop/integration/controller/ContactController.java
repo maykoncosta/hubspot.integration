@@ -1,10 +1,9 @@
 package com.maykon.hubstop.integration.controller;
 
-import com.maykon.hubstop.integration.exception.WebhookProcessingException;
 import com.maykon.hubstop.integration.model.dto.ContactRequest;
 import com.maykon.hubstop.integration.model.dto.WebhookEventDTO;
-import com.maykon.hubstop.integration.service.ContactService;
-import com.maykon.hubstop.integration.service.WebhookService;
+import com.maykon.hubstop.integration.service.interfaces.ContactService;
+import com.maykon.hubstop.integration.service.interfaces.WebhookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

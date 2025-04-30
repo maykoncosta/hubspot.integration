@@ -1,7 +1,7 @@
 package com.maykon.hubstop.integration.controller;
 
 import com.maykon.hubstop.integration.exception.TokenExchangeException;
-import com.maykon.hubstop.integration.service.AuthService;
+import com.maykon.hubstop.integration.service.interfaces.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,11 +31,5 @@ public class AuthController {
             return ResponseEntity.badRequest()
                     .body("Erro ao trocar o código por token: " + e.getMessage());
         }
-    }
-
-    @GetMapping("/token")
-    public String getToken() {
-        String token = authService.getToken();
-        return token != null ? token : "Token não encontrado!";
     }
 }

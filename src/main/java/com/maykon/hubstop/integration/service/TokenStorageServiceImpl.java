@@ -5,21 +5,25 @@ import com.maykon.hubstop.integration.exception.TokenNotFoundException;
 import com.maykon.hubstop.integration.model.TokenEntity;
 import com.maykon.hubstop.integration.model.dto.TokenResponse;
 import com.maykon.hubstop.integration.repository.TokenRepository;
+import com.maykon.hubstop.integration.service.interfaces.TokenStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TokenStorageService {
+public class TokenStorageServiceImpl implements TokenStorageService {
 
     private final TokenRepository repository;
     private final CryptoService cryptoService;
     private final HubSpotTokenExchanger hubSpotTokenExchanger;
 
+    @Transactional
+    @Override
     public void save(TokenResponse response) {
         log.info("Saving token");
         var entity = TokenEntity.builder()
@@ -33,6 +37,8 @@ public class TokenStorageService {
         log.info("Token saved");
     }
 
+    @Transactional
+    @Override
     public String getLatestAccessToken() {
         log.info("Getting latest access token");
         TokenEntity token = repository.findTopByOrderByIdDesc();

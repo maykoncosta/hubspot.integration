@@ -1,6 +1,6 @@
 package com.maykon.hubstop.integration.config.auth;
 
-import com.maykon.hubstop.integration.service.TokenStorageService;
+import com.maykon.hubstop.integration.service.TokenStorageServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -8,9 +8,9 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestTemplateConfig {
 
-    private final TokenStorageService tokenStorage;
+    private final TokenStorageServiceImpl tokenStorage;
 
-    public RestTemplateConfig(TokenStorageService tokenStorage) {
+    public RestTemplateConfig(TokenStorageServiceImpl tokenStorage) {
         this.tokenStorage = tokenStorage;
     }
 

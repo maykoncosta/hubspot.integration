@@ -4,6 +4,7 @@ import com.maykon.hubstop.integration.exception.WebhookProcessingException;
 import com.maykon.hubstop.integration.model.EventEntity;
 import com.maykon.hubstop.integration.model.dto.WebhookEventDTO;
 import com.maykon.hubstop.integration.repository.EventRepository;
+import com.maykon.hubstop.integration.service.interfaces.WebhookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,11 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class WebhookService {
+public class WebhookServiceImpl implements WebhookService {
 
     private final EventRepository eventRepository;
 
+    @Override
     public void handleWebhookEvents(List<WebhookEventDTO> events) {
         try {
             processEvents(events);

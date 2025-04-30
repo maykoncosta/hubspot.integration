@@ -1,6 +1,6 @@
 package com.maykon.hubstop.integration.config.auth;
 
-import com.maykon.hubstop.integration.service.TokenStorageService;
+import com.maykon.hubstop.integration.service.TokenStorageServiceImpl;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
@@ -10,9 +10,9 @@ import java.io.IOException;
 
 public class AuthInterceptor implements ClientHttpRequestInterceptor {
 
-    private final TokenStorageService tokenStorage;
+    private final TokenStorageServiceImpl tokenStorage;
 
-    public AuthInterceptor(TokenStorageService tokenStorage) {
+    public AuthInterceptor(TokenStorageServiceImpl tokenStorage) {
         this.tokenStorage = tokenStorage;
     }
 

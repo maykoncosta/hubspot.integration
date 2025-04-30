@@ -3,6 +3,7 @@ package com.maykon.hubstop.integration.service;
 import com.maykon.hubstop.integration.exception.OperationException;
 import com.maykon.hubstop.integration.exception.RateLimitedException;
 import com.maykon.hubstop.integration.model.dto.ContactRequest;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -21,7 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class HubSpotClient {
 
-    private final TokenStorageService tokenStorageService;
+    private final TokenStorageServiceImpl tokenStorageService;
     private final RestTemplate restTemplate;
 
     public void createContact(ContactRequest request) {
@@ -46,8 +47,8 @@ public class HubSpotClient {
         } catch (HttpClientErrorException.TooManyRequests e) {
             log.error("Rate limit exceeded while creating contact. Message: {}", e.getMessage());
             throw new RateLimitedException("Rate limit exceeded. Please try again later.");
-        } catch (RuntimeException e) {
-            log.error("Error creating contact: {}", e.getMessage());
+        } catch (HttpClientErrorException e) {
+            log.error("Error creating contact: {}", e.getResponseBodyAsString());
             throw new OperationException("Error creating contact: " + e.getMessage());
         }
     }
