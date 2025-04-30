@@ -25,4 +25,4 @@ hubspot:
 
 security:
   crypto:
-    secret: 1234567890123456
+    secret: ${SECURITY_CRYPTO_SECRET}

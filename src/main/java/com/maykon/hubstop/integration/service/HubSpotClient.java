@@ -3,7 +3,6 @@ package com.maykon.hubstop.integration.service;
 import com.maykon.hubstop.integration.exception.OperationException;
 import com.maykon.hubstop.integration.exception.RateLimitedException;
 import com.maykon.hubstop.integration.model.dto.ContactRequest;
-import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
