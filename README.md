@@ -30,9 +30,6 @@ Uma aplicação backend REST desenvolvida com Spring Boot, responsável por:
 - Criar contatos e reagir a eventos de webhook recebidos
 - Persistir dados temporários em banco H2
 
-## 🛠️ Foco
-100% back-end (Java + Spring)
-
 ## 🧠 Decisões Técnicas e Justificativas
 
 | Ferramenta | Justificativa prática |
