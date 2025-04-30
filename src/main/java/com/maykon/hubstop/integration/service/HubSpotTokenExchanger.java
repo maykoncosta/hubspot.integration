@@ -1,5 +1,6 @@
 package com.maykon.hubstop.integration.service;
 
+import com.maykon.hubstop.integration.exception.TokenExchangeException;
 import com.maykon.hubstop.integration.model.dto.TokenResponse;
 import com.maykon.hubstop.integration.service.interfaces.OAuthTokenExchanger;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class HubSpotTokenExchanger implements OAuthTokenExchanger {
     @Override
     public TokenResponse exchange(String code) {
         log.info("Exchanging code...");
+        TokenResponse tokenResponse = null;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -45,10 +47,17 @@ public class HubSpotTokenExchanger implements OAuthTokenExchanger {
 
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(form, headers);
 
-        ResponseEntity<TokenResponse> response = restTemplate.postForEntity(
-                "https://api.hubapi.com/oauth/v1/token", entity, TokenResponse.class);
-
-        TokenResponse tokenResponse = response.getBody();
+        try {
+            ResponseEntity<TokenResponse> response = restTemplate.postForEntity(
+                    "https://api.hubapi.com/oauth/v1/token",
+                    entity,
+                    TokenResponse.class
+            );
+            tokenResponse = response.getBody();
+        } catch (RuntimeException e) {
+            log.error("Error exchanging code: {}", e.getMessage());
+            throw new TokenExchangeException(e.getMessage());
+        }
         log.info("code exchanged successfully");
         return tokenResponse;
     }
@@ -74,9 +83,9 @@ public class HubSpotTokenExchanger implements OAuthTokenExchanger {
                     TokenResponse.class
             );
             return response.getBody();
-        } catch (HttpClientErrorException e) {
-            log.error("Erro ao renovar token: {}", e.getResponseBodyAsString(), e);
-            throw new RuntimeException("Erro ao renovar token", e);
+        } catch (RuntimeException e) {
+            log.error("Error while refreshing token: {}", e.getMessage());
+            throw new TokenExchangeException(e.getMessage());
         }
     }
 

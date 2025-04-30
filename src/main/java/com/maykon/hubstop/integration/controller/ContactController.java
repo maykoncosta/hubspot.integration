@@ -1,5 +1,6 @@
 package com.maykon.hubstop.integration.controller;
 
+import com.maykon.hubstop.integration.exception.WebhookProcessingException;
 import com.maykon.hubstop.integration.model.dto.ContactRequest;
 import com.maykon.hubstop.integration.model.dto.WebhookEventDTO;
 import com.maykon.hubstop.integration.service.ContactService;
@@ -27,7 +28,7 @@ public class ContactController {
     }
 
     @PostMapping("/webhook")
-    @ResponseStatus(HttpStatus.NO_CONTENT) // HubSpot espera 2xx
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void receiveWebhook(@RequestBody List<WebhookEventDTO> events) {
         webhookService.handleWebhookEvents(events);
     }

@@ -1,5 +1,7 @@
 package com.maykon.hubstop.integration.service;
 
+import com.maykon.hubstop.integration.exception.OperationException;
+import com.maykon.hubstop.integration.exception.RateLimitedException;
 import com.maykon.hubstop.integration.model.dto.ContactRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +44,11 @@ public class HubSpotClient {
         try {
             restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         } catch (HttpClientErrorException.TooManyRequests e) {
-            // Rate limit (429)
-            log.warn("Rate limit exceeded while creating contact. Message: {}", e.getMessage());
-            throw new RuntimeException("Rate limit exceeded. Please try again later.");
-        } catch (HttpClientErrorException e) {
-            log.error("Error creating contact: {}", e.getResponseBodyAsString());
-            throw new RuntimeException("Error creating contact: " + e.getMessage());
+            log.error("Rate limit exceeded while creating contact. Message: {}", e.getMessage());
+            throw new RateLimitedException("Rate limit exceeded. Please try again later.");
+        } catch (RuntimeException e) {
+            log.error("Error creating contact: {}", e.getMessage());
+            throw new OperationException("Error creating contact: " + e.getMessage());
         }
     }
 }

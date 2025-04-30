@@ -1,5 +1,6 @@
 package com.maykon.hubstop.integration.service;
 
+import com.maykon.hubstop.integration.exception.WebhookProcessingException;
 import com.maykon.hubstop.integration.model.EventEntity;
 import com.maykon.hubstop.integration.model.dto.WebhookEventDTO;
 import com.maykon.hubstop.integration.repository.EventRepository;
@@ -17,6 +18,15 @@ public class WebhookService {
     private final EventRepository eventRepository;
 
     public void handleWebhookEvents(List<WebhookEventDTO> events) {
+        try {
+            processEvents(events);
+        } catch (RuntimeException e) {
+            log.error(e.getMessage(), e);
+            throw new WebhookProcessingException(e.getMessage());
+        }
+    }
+
+    private void processEvents(List<WebhookEventDTO> events) {
         for (WebhookEventDTO event : events) {
             if ("contact.creation".equalsIgnoreCase(event.subscriptionType())) {
                 log.info("New contact created! ID: {}, Portal: {}, Subscription: {}", event.objectId(), event.portalId(), event.subscriptionType());

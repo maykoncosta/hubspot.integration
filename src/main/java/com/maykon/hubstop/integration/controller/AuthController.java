@@ -1,5 +1,6 @@
 package com.maykon.hubstop.integration.controller;
 
+import com.maykon.hubstop.integration.exception.TokenExchangeException;
 import com.maykon.hubstop.integration.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,13 @@ public class AuthController {
 
     @GetMapping("/callback")
     public ResponseEntity<String> callback(@RequestParam String code) {
-        authService.exchangeCodeForToken(code);
-        return ResponseEntity.ok("Token recebido com sucesso!");
+        try {
+            authService.exchangeCodeForToken(code);
+            return ResponseEntity.ok("Token recebido com sucesso!");
+        } catch (TokenExchangeException e) {
+            return ResponseEntity.badRequest()
+                    .body("Erro ao trocar o código por token: " + e.getMessage());
+        }
     }
 
     @GetMapping("/token")

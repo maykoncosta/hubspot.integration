@@ -1,6 +1,7 @@
 package com.maykon.hubstop.integration.service;
 
 import com.maykon.hubstop.integration.config.security.CryptoService;
+import com.maykon.hubstop.integration.exception.TokenNotFoundException;
 import com.maykon.hubstop.integration.model.TokenEntity;
 import com.maykon.hubstop.integration.model.dto.TokenResponse;
 import com.maykon.hubstop.integration.repository.TokenRepository;
@@ -36,8 +37,8 @@ public class TokenStorageService {
         log.info("Getting latest access token");
         TokenEntity token = repository.findTopByOrderByIdDesc();
         if(token == null) {
-            log.info("Token not found");
-            return "Token não encontrado";
+            log.error("Token not found");
+            throw new TokenNotFoundException("Token not found");
         }
 
         Instant now = Instant.now();
@@ -47,8 +48,8 @@ public class TokenStorageService {
             log.info("Token is expired");
             token.setExpired(true);
             repository.save(token);
-            renovarToken(token);
-            return "Token expirou, mas renovou com sucesso";
+            token = renewToken(token);
+            tokenExpiration = token.getCreatedAt().plusSeconds(token.getExpiresIn());
         }
 
         long remainingSeconds = tokenExpiration.getEpochSecond() - now.getEpochSecond();
@@ -59,7 +60,7 @@ public class TokenStorageService {
         return cryptoService.decrypt(token.getEncryptedAccessToken());
     }
 
-    private TokenEntity renovarToken(TokenEntity expiredToken) {
+    private TokenEntity renewToken(TokenEntity expiredToken) {
         log.info("Renewing token");
         String decryptedRefreshToken = cryptoService.decrypt(expiredToken.getEncryptedRefreshToken());
 
