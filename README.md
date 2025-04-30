@@ -17,6 +17,8 @@ Esta é uma aplicação **100% backend**, desenvolvida com Spring Boot.
 
 ## 📌 Descrição do Problema
 Integração com a API do HubSpot para permitir:
+- Autenticar usuários via OAuth2 com a API do HubSpot
+- Armazenar tokens no H2
 - Criação de contatos via endpoint interno
 - Recebimento de eventos de webhook do tipo `contact.creation`
 - Armazenamento seguro de tokens e resiliência a rate limit
